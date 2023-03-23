@@ -80,8 +80,13 @@ func (k *keychain) Get(key string) (Item, error) {
 	query.SetReturnData(true)
 
 	if k.path != "" {
-		// When we are querying, we don't create by default
-		query.SetMatchSearchList(gokeychain.NewWithPath(k.path))
+		kc, err := k.createOrOpen()
+
+		if err != nil {
+			return Item{}, err
+		}
+
+		query.SetMatchSearchList(kc)
 	}
 
 	debugf("Querying keychain for service=%q, account=%q, keychain=%q", k.service, key, k.path)
@@ -150,6 +155,12 @@ func (k *keychain) updateItem(kc gokeychain.Keychain, kcItem gokeychain.Item, ac
 	queryItem.SetReturnAttributes(true)
 
 	if k.path != "" {
+		kc, err := k.createOrOpen()
+
+		if err != nil {
+			return err
+		}
+
 		queryItem.SetMatchSearchList(kc)
 	}
 
@@ -242,9 +253,9 @@ func (k *keychain) Remove(key string) error {
 	item.SetAccount(key)
 
 	if k.path != "" {
-		kc := gokeychain.NewWithPath(k.path)
+		kc, err := k.createOrOpen()
 
-		if err := kc.Status(); err != nil {
+		if err != nil {
 			if err == gokeychain.ErrorNoSuchKeychain {
 				return ErrKeyNotFound
 			}
@@ -271,9 +282,9 @@ func (k *keychain) Keys() ([]string, error) {
 	query.SetReturnAttributes(true)
 
 	if k.path != "" {
-		kc := gokeychain.NewWithPath(k.path)
+		kc, err := k.createOrOpen()
 
-		if err := kc.Status(); err != nil {
+		if err != nil {
 			if err == gokeychain.ErrorNoSuchKeychain {
 				return []string{}, nil
 			}
