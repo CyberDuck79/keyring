@@ -1,6 +1,6 @@
 module github.com/99designs/keyring
 
-go 1.17
+go 1.19
 
 require (
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4
@@ -11,9 +11,9 @@ require (
 	github.com/lox/go-touchid v0.0.0-20170712105233-619cc8e578d0
 	github.com/mtibben/percent v0.2.1
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90
-	golang.org/x/sys v0.0.0-20220204135822-1c1b9b1eba6a
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+	golang.org/x/crypto v0.3.0
+	golang.org/x/sys v0.3.0
+	golang.org/x/term v0.3.0
 )
 
 require (
